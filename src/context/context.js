@@ -12,7 +12,15 @@ const GithubContext = React.createContext()
 
 //returns Provider component, what you get when you setup context above, later wrap app index.js in GithubProvider, to handle global state
 const GithubProvider = ({children}) => {
-	return <GithubContext.Provider value={'hello'}
+	const [githubUser, setGithubUser] = useState(mockUser)
+	const [repos, setRepos] = useState(mockRepos)
+	const [followers, setFollowers] = useState(mockFollowers)
+
+	return <GithubContext.Provider 
+	value={{githubUser,
+		repos,
+		followers
+	}}
 	>
 		{children}
 	</GithubContext.Provider>
