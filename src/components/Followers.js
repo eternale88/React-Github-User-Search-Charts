@@ -1,10 +1,32 @@
-import React from 'react';
-import { GithubContext } from '../context/context';
-import styled from 'styled-components';
+import React from 'react'
+import { GithubContext } from '../context/context'
+import styled from 'styled-components'
 
 const Followers = () => {
-  return <h2>followers component</h2>;
-};
+  const {followers} = React.useContext(GithubContext)
+  //const {} = followers
+  return (
+    <Wrapper>
+      <div className="followers">
+        {
+          followers.map((follower, index) => {
+            //givin avatar_url and alias
+            const {login, avatar_url:img, html_url} = follower
+            return (
+              <article key={index}>
+                <img src={img} alt={login}/>
+                <div>
+                  <h4>{login}</h4>
+                  <a href={html_url}>{html_url}</a>
+                </div>
+              </article>
+            )
+          })
+        }
+      </div>
+    </Wrapper>
+  )
+}
 
 const Wrapper = styled.article`
   background: var(--clr-white);
@@ -29,7 +51,7 @@ const Wrapper = styled.article`
     font-size: 1rem;
   }
   .followers {
-    overflow: scroll;
+    overflow: auto;
     height: 260px;
     display: grid;
     grid-template-rows: repeat(auto-fill, minmax(45px, 1fr));
@@ -57,5 +79,5 @@ const Wrapper = styled.article`
       color: var(--clr-grey-5);
     }
   }
-`;
-export default Followers;
+`
+export default Followers
