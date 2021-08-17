@@ -31,23 +31,26 @@ const GithubProvider = ({children}) => {
 		console.log(response)
 
 		if(response) {
-			//get users data
+			//set users data
 			setGithubUser(response.data)
 			const {login, followers_url} = response.data
-			//set users repos
-			axios(`${rootUrl}/users/${login}/repos?per_page=100`).
-			then((response) => {
-				setRepos(response.data)
-			})
+			//refactored to do all 3 api calls at once, and most importantly
+			// so that all data will be returned at same time, so no ui delays
+			await Promise.allSettled([axios(`${rootUrl}/users/${login}/repos?per_page=100`), axios(`${followers_url}?per_page=100`)]). 
+			then((results) => {
+				//since we know we call repos first, followers second, we can automatcally destructure and assign to multiple variables
+				const [repos, followers] = results
+				const status = 'fulfilled'
+				if(repos.status === status) {
+								//set users repos
+					setRepos(repos.value.data)
+				}
+				if(followers.status === status) {
+								//set users followers
+					setFollowers(followers.value.data)
+				}
 
-			//set users followers
-			axios(`${followers_url}?per_page=100`).
-			then((response) => {
-				setFollowers(response.data)
-			})
-			//refactored to do all api calls at once, and most importantly
-			// so that all data will be returned at same time, so now ui delays
-			await Promise.allSettled([])
+			}).catch((err) => console.log(err))
 			//repos
 			//https://api.github.com/users/mpj/repos?per_page=100
 			//followers
