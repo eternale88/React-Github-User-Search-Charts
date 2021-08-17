@@ -25,16 +25,40 @@ const GithubProvider = ({children}) => {
 		// remove toggle error in case any were already there
 		toggleError()
 		//set loading
+		setIsLoading(true)
 		const response = await axios(`${rootUrl}/users/${user}`).
 		catch(err => console.log(err))
 		console.log(response)
 
 		if(response) {
+			//get users data
 			setGithubUser(response.data)
+			const {login, followers_url} = response.data
+			//set users repos
+			axios(`${rootUrl}/users/${login}/repos?per_page=100`).
+			then((response) => {
+				setRepos(response.data)
+			})
+
+			//set users followers
+			axios(`${followers_url}?per_page=100`).
+			then((response) => {
+				setFollowers(response.data)
+			})
+			//refactored to do all api calls at once, and most importantly
+			// so that all data will be returned at same time, so now ui delays
+			await Promise.allSettled([])
+			//repos
+			//https://api.github.com/users/mpj/repos?per_page=100
+			//followers
+			//https://api.github.com/users/mpj/followers
 			// more logic here
 		} else {
 			toggleError(true, "there is no user with that username")
 		}
+		//hide load spinner once call complete and check request limit
+		checkRequestsLimit()
+		setIsLoading(false)
 	}
 	//function that hits api to check for that rate_limit, if rate limit is met we display an error message, limit is 60
 	//check rate
@@ -65,7 +89,8 @@ const GithubProvider = ({children}) => {
 		followers,
 		requests,
 		error,
-		searchGithubUser
+		searchGithubUser,
+		loading
 	}}
 	>
 		{children}
