@@ -1,10 +1,30 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useAuth0 } from '@auth0/auth0-react';
-
+//"@auth0/auth0-react": "^1.0.0",
 const Navbar = () => {
+  const { isAuthenticated, loginWithRedirect, logout, user, isLoading } = useAuth0()
+
+  const isUser = isAuthenticated && user
   return (
-    <Wrapper>navbar component</Wrapper>
+    <Wrapper>
+    {/*check if user is auth and if 1. picture and 2. name  are there, before display, and whether to diplay login or logout btn - depends wether user is auth or not */}
+    {isUser && user.picture && 
+      <img src={user.picture} alt={user.name}/>
+    }
+    {
+      isUser && user.name && 
+      <h4>Welcome, <strong>{user.name.toUpperCase()}</strong></h4>
+    }
+    {
+      isUser ?
+      <button onClick={() => {logout({returnTo: window.location.origin})}}>logout</button>
+      :
+      <button onClick={loginWithRedirect}>login</button>
+    }
+      
+     
+    </Wrapper>
   )
 }
 

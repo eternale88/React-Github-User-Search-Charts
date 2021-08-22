@@ -6,11 +6,19 @@ import * as serviceWorker from './serviceWorker';
 import { GithubProvider } from './context/context';
 import { Auth0Provider } from '@auth0/auth0-react';
 
+//process.env.REACT_APP_AUTO_O_URL
+//process.env.REACT_APP_AUTO_O_CLIENTID
 ReactDOM.render(
   <React.StrictMode>
-  <GithubProvider>
-    <App />
-  </GithubProvider>
+    <Auth0Provider
+      domain={process.env.REACT_APP_AUTO_O_URL}
+      clientId={process.env.REACT_APP_AUTO_O_CLIENTID}
+      redirectUri={window.location.origin}
+    >
+      <GithubProvider>
+        <App />
+      </GithubProvider>
+    </Auth0Provider>
   </React.StrictMode>,
   document.getElementById('root')
 );
