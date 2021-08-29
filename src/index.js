@@ -12,7 +12,7 @@ ReactDOM.render(
   <React.StrictMode>
     <Auth0Provider
       domain={process.env.REACT_APP_AUTO_O_URL}
-      clientId={JSON.parse(process.env.REACT_APP_AUTO_O_CLIENTID)}
+      clientId={process.env.REACT_APP_AUTO_O_CLIENTID}
       redirectUri={window.location.origin}
       cacheLocation='localstorage'
     >
@@ -27,4 +27,4 @@ ReactDOM.render(
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
+//serviceWorker.unregister();
