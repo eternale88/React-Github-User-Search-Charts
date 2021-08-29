@@ -26,8 +26,7 @@ const GithubProvider = ({children}) => {
 		toggleError()
 		//set loading
 		setIsLoading(true)
-		const response = await axios(`${rootUrl}/users/${user}`).
-		catch(err => console.log(err))
+		const response = await axios(`${rootUrl}/users/${user}`).catch(err => console.log(err))
 		//console.log(response)
 
 		if(response) {
@@ -36,8 +35,7 @@ const GithubProvider = ({children}) => {
 			const {login, followers_url} = response.data
 			//refactored to do all 3 api calls at once, and most importantly
 			// so that all data will be returned at same time, so no ui delays
-			await Promise.allSettled([axios(`${rootUrl}/users/${login}/repos?per_page=100`), axios(`${followers_url}?per_page=100`)]). 
-			then((results) => {
+			await Promise.allSettled([axios(`${rootUrl}/users/${login}/repos?per_page=100`), axios(`${followers_url}?per_page=100`)]).then((results) => {
 				//since we know we call repos first, followers second, we can automatcally destructure and assign to multiple variables
 				const [repos, followers] = results
 				const status = 'fulfilled'
