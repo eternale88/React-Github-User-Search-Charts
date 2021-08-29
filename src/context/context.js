@@ -28,7 +28,7 @@ const GithubProvider = ({children}) => {
 		setIsLoading(true)
 		const response = await axios(`${rootUrl}/users/${user}`).
 		catch(err => console.log(err))
-		console.log(response)
+		//console.log(response)
 
 		if(response) {
 			//set users data
